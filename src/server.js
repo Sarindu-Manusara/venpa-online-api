@@ -13,6 +13,10 @@ const PORT = Number(process.env.PORT || 4000);
     await sequelize.authenticate();
     console.log("MySQL connect wuna!");
 
+    // Auto-sync models to database tables
+    await sequelize.sync({ alter: true });
+    console.log("Database tables synchronized!");
+
     if (process.env.SYNC_ENABLED === "true") {
       startSyncJobs();
       console.log("Sync jobs tika start wuna!");
