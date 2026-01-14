@@ -5,6 +5,7 @@ const SubCategory = require("./SubCategory");
 const Product = require("./Product");
 const ProductImage = require("./ProductImage");
 const SyncState = require("./SyncState");
+const User = require("./auth");
 
 Product.hasMany(ProductImage, { foreignKey: "prod_code", sourceKey: "prod_code", as: "images" });
 ProductImage.belongsTo(Product, { foreignKey: "prod_code", targetKey: "prod_code", as: "product" });
@@ -15,6 +16,6 @@ module.exports = {
   Category,
   SubCategory,
   Product,
-  ProductImage,
-  SyncState
+  SyncState,
+  User,
 };
