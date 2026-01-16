@@ -5,10 +5,10 @@ const openapiSpec = require("./docs/openapi.json");
 
 const authRoutes = require("./routes/auth/auth.routes");
 
-const departmentsRoutes = require("./routes/departments.routes");
-const categoriesRoutes = require("./routes/categories.routes");
-const subcategoriesRoutes = require("./routes/subcategories.routes");
-const productsRoutes = require("./routes/products.routes");
+const departmentsRoutes = require("./routes/master/departments.routes");
+const categoriesRoutes = require("./routes/master/categories.routes");
+const subcategoriesRoutes = require("./routes/master/subcategories.routes");
+const productsRoutes = require("./routes/master/products.routes");
 const cartRoutes = require("./routes/cart/cart.routes");
 const syncRoutes = require("./routes/sync.routes");
 
