@@ -1,4 +1,8 @@
-require("dotenv").config();
+const path = require("path");
+const envFile =
+  process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+require("dotenv").config({ path: path.resolve(process.cwd(), envFile) });
+
 const app = require("./app");
 const { sequelize } = require("./models");
 const { startSyncJobs } = require("./services/sync/syncJobs");
@@ -24,9 +28,7 @@ const PORT = Number(process.env.PORT || 4000);
       console.log("Sync jobs tika start wuna!");
     }
 
-    app.listen(PORT, () =>
-      console.log(`Running on http://localhost:${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`Running on http://localhost:${PORT}`));
   } catch (err) {
     console.error("❌ Startup error ekak :(", err);
     process.exit(1);

@@ -1,5 +1,4 @@
-const{ Sequelize } = require('sequelize');
-require('dotenv').config();
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
   process.env.MYSQL_DB,
@@ -11,9 +10,9 @@ const sequelize = new Sequelize(
     dialect: "mysql",
     logging: false,
     define: {
-      freezeTableName: true,   // use table name exactly as in DB
-      underscored: true        // maps created_at, updated_at
-    }
+      freezeTableName: true, // use table name exactly as in DB
+      underscored: true, // maps created_at, updated_at
+    },
   }
 );
 
