@@ -4,12 +4,16 @@ const sequelize = require("../config/db");
 const ProductImage = sequelize.define(
   "ProductImage",
   {
-    id: { type: DataTypes.BIGINT.UNSIGNED, primaryKey: true, autoIncrement: true },
+    id: {
+      type: DataTypes.BIGINT.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
 
     prod_code: { type: DataTypes.STRING(255), allowNull: false },
     image: { type: DataTypes.STRING(255), allowNull: false },
 
-    product_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: false },
+    product_id: { type: DataTypes.BIGINT, allowNull: true },
 
     created_by: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
     updated_by: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
@@ -18,7 +22,7 @@ const ProductImage = sequelize.define(
   },
   {
     tableName: "product_images",
-    timestamps: false, 
+    timestamps: false,
   }
 );
 
