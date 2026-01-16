@@ -12,16 +12,18 @@ const PORT = Number(process.env.PORT || 4000);
 (async () => {
   try {
     console.log("MYSQL_USER:", process.env.MYSQL_USER);
-    console.log("MYSQL_PASS exists?:", Boolean(process.env.MYSQL_PASS));
 
     await sequelize.authenticate();
     console.log("MySQL connect wuna!");
 
-    // ✅ ONLY sync locally (DEV)
-    if (process.env.NODE_ENV !== "production") {
-      await sequelize.sync({ alter: true });
-      console.log("Database tables synchronized (DEV only)!");
-    }
+    console.log("Syncing Tables...");
+    console.log("Registered Models:", Object.keys(sequelize.models));
+
+    const syncOptions =
+      process.env.NODE_ENV === "development" ? { alter: true } : {};
+
+    await sequelize.sync(syncOptions);
+    console.log(`Database synchronized! (Mode: ${process.env.NODE_ENV})`);
 
     if (process.env.SYNC_ENABLED === "true") {
       startSyncJobs();
