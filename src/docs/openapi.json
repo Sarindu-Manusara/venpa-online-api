@@ -269,6 +269,72 @@
         ],
         "responses": { "200": { "description": "OK" } }
       }
+    },
+    "/api/v1/wishlist": {
+      "get": {
+        "summary": "Get user's wishlist",
+        "tags": ["Wishlist"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "post": {
+        "summary": "Add item to wishlist",
+        "tags": ["Wishlist"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["product_id"],
+                "properties": {
+                  "product_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Created" } }
+      }
+    },
+    "/api/v1/wishlist/toggle": {
+      "post": {
+        "summary": "Toggle item in wishlist",
+        "tags": ["Wishlist"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["product_id"],
+                "properties": {
+                  "product_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/v1/wishlist/{id}": {
+      "delete": {
+        "summary": "Remove item from wishlist",
+        "tags": ["Wishlist"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
     }
   },
   "components": {
@@ -300,6 +366,15 @@
           "department": { "type": "string" },
           "cat_code": { "type": "string" },
           "status": { "type": "integer" }
+        },
+        "Wishlist": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "user_id": { "type": "integer" },
+            "product_id": { "type": "integer" },
+            "product": { "$ref": "#/components/schemas/Product" }
+          }
         }
       },
       "Product": {
