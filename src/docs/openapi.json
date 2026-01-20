@@ -391,15 +391,12 @@
           "selling_price": { "type": "number", "format": "float" },
           "marked_price": { "type": "number", "format": "float" },
           "wholesale_price": { "type": "number", "format": "float" },
-          "title_in_other_la": { "type": "string", "nullable": true },
+          "title_in_other_language": { "type": "string", "nullable": true },
           "book_type": { "type": "string", "nullable": true },
           "publisher": { "type": "string", "nullable": true },
           "isbn": { "type": "string", "nullable": true },
           "publish_year": { "type": "integer", "nullable": true },
           "alert_qty": { "type": "integer", "nullable": true },
-          "width": { "type": "number", "format": "float", "nullable": true },
-          "height": { "type": "number", "format": "float", "nullable": true },
-          "depth": { "type": "number", "format": "float", "nullable": true },
           "images": {
             "type": "array",
             "items": {
