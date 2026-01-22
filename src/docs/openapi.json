@@ -397,7 +397,7 @@
     },
     "/api/v1/profile/summary": {
       "get": {
-        "summary": "Profile summary (orders, reviews, points, recommendations)",
+        "summary": "Profile summary (user + orders/reviews/points)",
         "responses": {
           "200": {
             "description": "OK"

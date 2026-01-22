@@ -1,5 +1,5 @@
 const { QueryTypes } = require("sequelize");
-const { sequelize, Product, ProductImage } = require("../models");
+const { sequelize } = require("../models");
 
 async function safeCount(table, column, userId) {
   try {
@@ -29,20 +29,20 @@ exports.getProfileSummary = async (req, res, next) => {
       safeCount(reviewsTable, reviewsUserColumn, req.user.id)
     ]);
 
-    const recommended = await Product.findAll({
-      limit: 10,
-      order: sequelize.random(),
-      include: [{ model: ProductImage, as: "images" }]
-    });
-
     res.json({
-      user,
+      user: {
+        id: user.id,
+        fname: user.fname,
+        lname: user.lname,
+        email: user.email,
+        phone: user.phone,
+        status: user.status
+      },
       stats: {
         orders: orderCount,
         reviews: reviewCount,
         points: 0
-      },
-      recommended
+      }
     });
   } catch (e) { next(e); }
 };
