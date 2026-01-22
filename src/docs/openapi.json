@@ -451,6 +451,19 @@
         }
       }
     },
+    "/api/v1/profile/summary": {
+      "get": {
+        "summary": "Profile summary (orders, reviews, points, recommendations)",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/v1/cart": {
       "get": {
         "summary": "Get user's active cart",

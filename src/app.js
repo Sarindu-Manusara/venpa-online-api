@@ -12,6 +12,7 @@ const productsRoutes = require("./routes/master/products.routes");
 const wishlistRoutes = require("./routes/cart/wishlist.routes");
 const cartRoutes = require("./routes/cart/cart.routes");
 const syncRoutes = require("./routes/sync.routes");
+const profileRoutes = require("./routes/profile.routes");
 
 const errorMiddleware = require("./middleware/error.middleware");
 
@@ -47,6 +48,7 @@ app.use("/api/v1/products", productsRoutes);
 app.use("/api/v1/sync", syncRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/wishlist", wishlistRoutes);
+app.use("/api/v1/profile", profileRoutes);
 
 app.use(errorMiddleware);
 
