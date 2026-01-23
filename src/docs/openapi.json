@@ -650,6 +650,38 @@
         "bearerFormat": "JWT"
       }
     },
+    "/api/v1/cart/quantity": {
+      "put": {
+        "summary": "Update cart item quantity by user/product",
+        "tags": ["Cart"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": { "type": "integer" },
+                  "product_id": { "type": "integer" },
+                  "quantity": { "type": "integer" }
+                },
+                "required": ["product_id", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "schemas": {
       "Department": {
         "type": "object",

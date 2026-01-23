@@ -105,6 +105,56 @@ exports.updateItem = async (req, res) => {
 };
 
 /**
+ * Update item quantity using user_id + product_id
+ */
+exports.updateQuantity = async (req, res) => {
+  try {
+    const { user_id, product_id, quantity } = req.body;
+
+    if (user_id && Number(user_id) !== Number(req.user.id)) {
+      return res.status(403).json({ error: "User mismatch" });
+    }
+
+    if (!product_id || quantity === undefined) {
+      return res.status(400).json({ error: "Product ID and quantity are required" });
+    }
+
+    const [cart] = await Cart.findOrCreate({
+      where: { user_id: req.user.id, status: "active" },
+      defaults: { user_id: req.user.id, status: "active" },
+    });
+
+    const item = await CartItem.findOne({
+      where: { cart_id: cart.id, product_id },
+    });
+
+    if (!item) {
+      if (quantity <= 0) {
+        return res.json({ message: "Item not in cart" });
+      }
+      const created = await CartItem.create({
+        cart_id: cart.id,
+        product_id,
+        quantity,
+      });
+      return res.json({ message: "Cart item created", item: created });
+    }
+
+    if (quantity <= 0) {
+      await item.destroy();
+      return res.json({ message: "Item removed from cart" });
+    }
+
+    item.quantity = quantity;
+    await item.save();
+
+    res.json({ message: "Cart item updated", item });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/**
  * Remove item from cart
  */
 exports.removeItem = async (req, res) => {
