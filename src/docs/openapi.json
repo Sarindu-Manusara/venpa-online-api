@@ -471,6 +471,46 @@
         }
       }
     },
+    "/api/v1/cart/items": {
+      "post": {
+        "summary": "Bulk ekak widihata cart items adding",
+        "tags": ["Cart"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "product_id": { "type": "integer" },
+                        "quantity": { "type": "integer" }
+                      },
+                      "required": ["product_id", "quantity"]
+                    }
+                  }
+                },
+                "required": ["items"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/cart/{id}": {
       "put": {
         "summary": "Update cart item quantity",

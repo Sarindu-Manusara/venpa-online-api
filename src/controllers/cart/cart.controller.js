@@ -105,6 +105,61 @@ exports.updateItem = async (req, res) => {
 };
 
 /**
+ * Replace or insert cart items in bulk
+ */
+exports.setCartItems = async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ error: "Items array is required" });
+    }
+
+    const [cart] = await Cart.findOrCreate({
+      where: { user_id: req.user.id, status: "active" },
+      defaults: { user_id: req.user.id, status: "active" },
+    });
+
+    const updates = [];
+
+    for (const item of items) {
+      const productId = item?.product_id;
+      const quantity = item?.quantity;
+
+      if (!productId || quantity === undefined) continue;
+
+      const existing = await CartItem.findOne({
+        where: { cart_id: cart.id, product_id: productId },
+      });
+
+      if (quantity <= 0) {
+        if (existing) {
+          await existing.destroy();
+        }
+        continue;
+      }
+
+      if (existing) {
+        existing.quantity = quantity;
+        await existing.save();
+        updates.push(existing);
+      } else {
+        const created = await CartItem.create({
+          cart_id: cart.id,
+          product_id: productId,
+          quantity,
+        });
+        updates.push(created);
+      }
+    }
+
+    res.json({ message: "Cart items updated", items: updates });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/**
  * Update item quantity using user_id + product_id
  */
 exports.updateQuantity = async (req, res) => {
