@@ -643,6 +643,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "Department": {
         "type": "object",
@@ -860,4 +867,8 @@
       }
     }
   }
+  ,
+  "security": [
+    { "bearerAuth": [] }
+  ]
 }
