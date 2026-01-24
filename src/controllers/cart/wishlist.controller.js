@@ -17,12 +17,18 @@ exports.getWishlist = async (req, res) => {
         {
           model: Product,
           attributes: { exclude: ["id"] },
-          include: [{ model: ProductImage, as: "images", attributes: { exclude: ["id", "product_id"] } }],
+          include: [
+            {
+              model: ProductImage,
+              as: "images",
+              attributes: { exclude: ["id", "product_id"] },
+            },
+          ],
         },
       ],
     });
 
-    const products = wishlist.map((item) => item.Product).filter(Boolean);
+    const products = wishlist.map((item) => item.product).filter(Boolean);
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });

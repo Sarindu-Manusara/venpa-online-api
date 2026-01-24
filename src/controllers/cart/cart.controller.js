@@ -22,7 +22,13 @@ exports.getCart = async (req, res) => {
         {
           model: Product,
           attributes: { exclude: ["id"] },
-          include: [{ model: ProductImage, as: "images", attributes: { exclude: ["id", "product_id"] } }],
+          include: [
+            {
+              model: ProductImage,
+              as: "images",
+              attributes: { exclude: ["id", "product_id"] },
+            },
+          ],
         },
       ],
     });
@@ -31,7 +37,7 @@ exports.getCart = async (req, res) => {
       cart: { status: cart.status },
       items: cartItems.map((item) => ({
         quantity: item.quantity,
-        product: item.Product || null,
+        product: item.product || null,
       })),
     });
   } catch (error) {
@@ -48,7 +54,9 @@ exports.addToCart = async (req, res) => {
     const { prod_code, quantity } = req.body;
 
     if (!prod_code || quantity === undefined) {
-      return res.status(400).json({ error: "Product code and quantity are required" });
+      return res
+        .status(400)
+        .json({ error: "Product code and quantity are required" });
     }
 
     const product = await getProductByCode(prod_code);
@@ -193,7 +201,9 @@ exports.updateQuantity = async (req, res) => {
     const { prod_code, quantity } = req.body;
 
     if (!prod_code || quantity === undefined) {
-      return res.status(400).json({ error: "Product code and quantity are required" });
+      return res
+        .status(400)
+        .json({ error: "Product code and quantity are required" });
     }
 
     const product = await getProductByCode(prod_code);
