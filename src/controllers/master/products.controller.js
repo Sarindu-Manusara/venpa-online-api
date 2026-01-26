@@ -77,11 +77,17 @@ exports.getById = async (req, res, next) => {
     });
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    const reviews = await Review.findAll({
-      where: { product_id: product.id },
-      attributes: { exclude: ["id", "product_id", "user_id"] },
-      order: [["created_at", "DESC"]],
-    });
+    let reviews = [];
+    try {
+      reviews = await Review.findAll({
+        where: { product_id: product.id },
+        attributes: { exclude: ["id", "product_id", "user_id"] },
+        order: [["created_at", "DESC"]],
+      });
+    } catch (err) {
+      console.warn("Reviews fetch failed:", err.message);
+      reviews = [];
+    }
 
     res.json({
       product,
