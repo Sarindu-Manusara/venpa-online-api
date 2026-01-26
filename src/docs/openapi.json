@@ -708,19 +708,10 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
     },
     "/api/v1/cart/quantity": {
       "put": {
-        "summary": "Update cart item quantity by user/product",
+        "summary": "Update cart item quantity by product code",
         "tags": ["Cart"],
         "security": [
           {
@@ -747,6 +738,60 @@
             "description": "OK"
           }
         }
+      }
+    },
+    "/api/v1/reviews/product/{prod_code}": {
+      "get": {
+        "summary": "List reviews for a product",
+        "parameters": [
+          {
+            "name": "prod_code",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/api/v1/reviews": {
+      "post": {
+        "summary": "Create or update a review",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["prod_code", "rating"],
+                "properties": {
+                  "prod_code": { "type": "string" },
+                  "rating": { "type": "integer" },
+                  "comment": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
