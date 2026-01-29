@@ -1,5 +1,6 @@
 const { User } = require("../../models");
 const { z } = require("zod");
+const { OAuth2Client } = require("google-auth-library");
 
 // Validation schemas
 // 1: First name is required
@@ -112,6 +113,70 @@ exports.login = async (req, res) => {
       const uniqueCodes = [...new Set(codes)];
       return res.status(400).json({ success: false, error_codes: uniqueCodes });
     }
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.googleLogin = async (req, res) => {
+  try {
+    const { idToken, email, name } = req.body || {};
+
+    if (!idToken) {
+      return res.status(400).json({ success: false, message: "idToken is required" });
+    }
+
+    const rawIds = process.env.GOOGLE_CLIENT_IDS || process.env.GOOGLE_CLIENT_ID;
+    if (!rawIds) {
+      return res.status(400).json({ success: false, message: "Google client IDs not configured" });
+    }
+    const clientIds = rawIds.split(",").map((s) => s.trim()).filter(Boolean);
+    if (!clientIds.length) {
+      return res.status(400).json({ success: false, message: "Google client IDs not configured" });
+    }
+
+    const client = new OAuth2Client();
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: clientIds,
+    });
+    const payload = ticket.getPayload();
+
+    if (!payload?.email) {
+      return res.status(400).json({ success: false, message: "Invalid Google token" });
+    }
+
+    if (email && payload.email !== email) {
+      return res.status(400).json({ success: false, message: "Email mismatch" });
+    }
+
+    const fullName = payload.name || name || payload.email;
+    const parts = fullName.trim().split(/\s+/);
+    const fname = parts[0] || "User";
+    const lname = parts.slice(1).join(" ") || " ";
+
+    let user = await User.findOne({ where: { email: payload.email } });
+    if (!user) {
+      const randomPassword = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      user = await User.create({
+        fname,
+        lname,
+        email: payload.email,
+        phone: payload.phone_number || "0000000000",
+        password: randomPassword,
+        status: 1,
+      });
+    }
+
+    const userResponse = user.toJSON();
+    delete userResponse.password;
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      user: userResponse,
+      token: user.generateToken(),
+    });
+  } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };

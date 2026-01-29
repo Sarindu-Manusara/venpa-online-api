@@ -5,6 +5,7 @@ const auth = require("../../middleware/auth.middleware");
 
 router.post("/register", c.register);
 router.post("/login", c.login);
+router.post("/google-login", c.googleLogin);
 router.get("/me", auth, (req, res) => {
   const user = req.user.toJSON();
   delete user.password;

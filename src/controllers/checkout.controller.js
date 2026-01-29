@@ -6,10 +6,7 @@ exports.createCheckout = async (req, res, next) => {
       return res.status(400).json({ message: "Checkout payload is required" });
     }
 
-    const orderId = req.body?.order_id ?? req.body?.orderId ?? null;
-    if (!orderId) {
-      return res.status(400).json({ message: "order_id is required" });
-    }
+    const orderId = Number(`${Date.now()}${Math.floor(Math.random() * 1000).toString().padStart(3, "0")}`);
 
     const checkout = await Checkout.create({
       order_id: orderId,
