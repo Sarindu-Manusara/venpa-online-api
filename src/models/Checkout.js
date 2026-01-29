@@ -9,6 +9,7 @@ const Checkout = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    order_id: { type: DataTypes.STRING(100), allowNull: false },
     user_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: false },
     payload: { type: DataTypes.JSON, allowNull: false },
     status: { type: DataTypes.STRING(50), allowNull: false, defaultValue: "pending" },

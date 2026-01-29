@@ -6,7 +6,13 @@ exports.createCheckout = async (req, res, next) => {
       return res.status(400).json({ message: "Checkout payload is required" });
     }
 
+    const orderId = req.body?.order_id ?? req.body?.orderId ?? null;
+    if (!orderId) {
+      return res.status(400).json({ message: "order_id is required" });
+    }
+
     const checkout = await Checkout.create({
+      order_id: orderId,
       user_id: req.user.id,
       payload: req.body,
       status: "pending",
@@ -14,12 +20,11 @@ exports.createCheckout = async (req, res, next) => {
       updated_at: new Date(),
     });
 
-    const orderId = req.body?.order_id ?? req.body?.orderId ?? null;
-
     res.status(201).json({
       message: "Checkout created",
       order_id: orderId,
       checkout: {
+        order_id: checkout.order_id,
         status: checkout.status,
         payload: checkout.payload,
         created_at: checkout.created_at,
